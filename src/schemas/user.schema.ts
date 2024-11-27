@@ -1,5 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
+import { UserSettings } from './userSettings.schema';
+import { Post } from './post.schema';
 
 export interface UserInterface extends Document {
   username: string;
@@ -18,6 +20,12 @@ export class User {
 
   @Prop({ required: false })
   avatarUrl?: string;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'UserSettings' })
+  settings?: UserSettings;
+
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }] })
+  posts: Post[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
